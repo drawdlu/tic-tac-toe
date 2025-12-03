@@ -30,7 +30,7 @@ const GameBoard = (function () {
 function createCell () {
     let player = null;
 
-    const getPlayer = function () {
+    const getPlayer = () => {
         return player;
     }
 
@@ -54,3 +54,25 @@ function createPlayer (nameValue) {
 
     return { getName };
 }
+
+const GameLogic = (function () {
+    const players = [createPlayer("Player 1"), createPlayer("Player 2")];
+    let currentPlayer = players[0];
+
+    const switchCurrentPlayer = () => {
+        currentPlayer = currentPlayer == players[0] ? players[1] : players[0];
+    }
+
+    const getCurrentPlayer = () => currentPlayer;
+
+    const makeMove = (x, y) => {
+        cell = GameBoard.getCell(x, y);
+
+        if ( cell.isEmpty() ) {
+            cell.setPlayer(getCurrentPlayer());
+            switchCurrentPlayer();
+        }
+    }
+
+    return { makeMove }
+})();
