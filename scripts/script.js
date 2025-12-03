@@ -28,21 +28,29 @@ const GameBoard = (function () {
 })();
 
 function createCell () {
-    let marker = null;
+    let player = null;
 
-    const getMarker = function () {
-        return marker;
+    const getPlayer = function () {
+        return player;
     }
 
-    const setMarker = (value) => {
+    const setPlayer = (value) => {
         if (isEmpty()) {
-            marker = value;
+            player = value;
         }
     }
 
     const isEmpty = () => {
-        return marker == null ? true : false ;
+        return player == null ? true : false ;
     }
 
-    return { getMarker, setMarker, isEmpty };
+    return { getPlayer, setPlayer, isEmpty };
+}
+
+function createPlayer (nameValue) {
+    let name = nameValue;
+
+    const getName = () => name;
+
+    return { getName };
 }
