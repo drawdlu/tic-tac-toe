@@ -107,43 +107,23 @@ const GameLogic = (function () {
     }
 
     const checkWin = () => {
-        for (let i = 0; i < winConditions.length; ++i) {
-            if( allOccupiedByCurrentPlayer(winConditions[i]) ) {
-                return true;
-            }
-        }
-
-        return false;
+        return winConditions.some(allOccupiedByCurrentPlayer);
     }
 
     const checkDraw = () => {
-        if (movesTaken == 9) {
-            return true;
-        }
-
-        return false;
+        return movesTaken == 9;
     }
  
     const allOccupiedByCurrentPlayer = (indicesArrray) => {
-        for (let i = 0; i < indicesArrray.length; ++i) {
-            if (notOccupiedByCurrentPlayer(indicesArrray[i])) {
-                return false;
-            }
-        }
-
-        return true;
+        return indicesArrray.every(occupiedByCurrentPlayer);
     }
 
-    const notOccupiedByCurrentPlayer = (index) => {
-        return GameBoard.getCell(index).getPlayer() !== currentPlayer;
+    const occupiedByCurrentPlayer = (index) => {
+        return GameBoard.getCell(index).getPlayer() === currentPlayer;
     }
 
     const getPlayerSymbol = (player) => {
-        if (player === players["x"]) {
-            return "X";
-        } else {
-            return "O";
-        }
+        return (player === players["x"]) ? "X" : "O" ;
     }
 
     const resetGame = () => {
