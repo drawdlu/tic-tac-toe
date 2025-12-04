@@ -2,24 +2,17 @@ const GameBoard = (function () {
     const board = [];
 
     const initializeBoard = () =>  {
-        board.length = 0;
-
-        for (let i = 0; i < 3; ++i) {
-            let row = createRow();
-            board.push(row);
+        for (let i = 0; i < 8; ++i) {
+            board.push(createCell())
         }
-    }
-
-    const createRow = () => {
-        return [ createCell(), createCell() , createCell() ];
     }
 
     const getBoard = () => {
         return board;
     }
 
-    const getCell = (x, y) => {
-        return board[x][y];
+    const getCell = (index) => {
+        return board[index];
     }
 
     initializeBoard();
@@ -65,8 +58,8 @@ const GameLogic = (function () {
 
     const getCurrentPlayer = () => currentPlayer;
 
-    const makeMove = (x, y) => {
-        cell = GameBoard.getCell(x, y);
+    const makeMove = (index) => {
+        cell = GameBoard.getCell(index);
 
         if ( cell.isEmpty() ) {
             cell.setPlayer(getCurrentPlayer());
