@@ -2,7 +2,7 @@ const GameBoard = (function () {
     const board = [];
 
     const initializeBoard = () =>  {
-        for (let i = 0; i < 8; ++i) {
+        for (let i = 0; i < 9; ++i) {
             board.push(createCell())
         }
     }
@@ -28,9 +28,7 @@ function createCell () {
     }
 
     const setPlayer = (value) => {
-        if (isEmpty()) {
-            player = value;
-        }
+        player = value;
     }
 
     const isEmpty = () => {
@@ -51,6 +49,8 @@ function createPlayer (nameValue) {
 const GameLogic = (function () {
     const players = [createPlayer("Player 1"), createPlayer("Player 2")];
     let currentPlayer = players[0];
+    const winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7],
+                            [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
     const switchCurrentPlayer = () => {
         currentPlayer = currentPlayer == players[0] ? players[1] : players[0];
@@ -62,10 +62,33 @@ const GameLogic = (function () {
         cell = GameBoard.getCell(index);
 
         if ( cell.isEmpty() ) {
-            cell.setPlayer(getCurrentPlayer());
-            switchCurrentPlayer();
+            cell.setPlayer(currentPlayer);
         }
     }
 
-    return { makeMove }
+    const checkWin = () => {
+        for (let i = 0; i < winConditions.length; ++i) {
+            if( allOccupiedByCurrentPlayer(winConditions[i]) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    const allOccupiedByCurrentPlayer = (indicesArrray) => {
+        for (let i = 0; i < indicesArrray.length; ++i) {
+            if (notOccupiedByCurrentPlayer(indicesArrray[i])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    const notOccupiedByCurrentPlayer = (index) => {
+        return GameBoard.getCell(index).getPlayer() !== currentPlayer;
+    }
+
+    return { makeMove, checkWin }
 })();
