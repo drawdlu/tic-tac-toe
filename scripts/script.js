@@ -142,5 +142,22 @@ const DisplayController = (function () {
         displayCell.textContent = symbol;
     }
 
-    return { displayBoard }
+    const addEventListenersToButtons = () => {
+        const buttons = document.querySelectorAll(' .cell button ');
+        buttons.forEach(addListener);
+    }
+
+    const addListener = (button) => {
+        button.addEventListener('click', triggerMove)
+    }
+
+    const triggerMove = (event) => {
+        GameLogic.makeMove(event.target.id)
+    }
+
+    return { displayBoard, addEventListenersToButtons }
 })();
+
+document.addEventListener('DOMContentLoaded', () => {
+    DisplayController.addEventListenersToButtons();
+})
