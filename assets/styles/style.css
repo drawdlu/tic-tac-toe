@@ -1,6 +1,12 @@
+header {
+    text-align: center;
+}
+
 main {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
 }
 
 .board .container {

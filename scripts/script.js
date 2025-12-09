@@ -131,33 +131,47 @@ const GameLogic = (function () {
 
 const DisplayController = (function () {
     const displayBoard = () => {
-        for (let i = 0; i < GameBoard.getBoard().length; ++i) {
-            printSymbol(i);
+        for (let index = 0; index < GameBoard.getBoard().length; ++index) {
+            displayCell(index, GameBoard.getSymbol(index));
         }
     }
 
-    const printSymbol = (index) => {
-        const symbol = GameBoard.getSymbol(index);
+    const displayCell = (index, symbol) => {
         const displayCell = document.querySelector(`.cell:nth-child(${index + 1}) button`);
         displayCell.textContent = symbol;
     }
 
-    const addEventListenersToButtons = () => {
-        const buttons = document.querySelectorAll(' .cell button ');
-        buttons.forEach(addListener);
+    const addEventListenersToCells = () => {
+        const cells = document.querySelectorAll(' .cell button ');
+        cells.forEach(addListener);
     }
 
-    const addListener = (button) => {
-        button.addEventListener('click', triggerMove)
+    const addListener = (cell) => {
+        cell.addEventListener('click', triggerMove)
     }
 
     const triggerMove = (event) => {
         GameLogic.makeMove(event.target.id)
     }
 
-    return { displayBoard, addEventListenersToButtons }
+    const addResetGameListener = () => {
+        const buttons = document.querySelectorAll('button.reset')
+        buttons.forEach(addResetListener)
+    }
+
+    const addResetListener = (button) => {
+        button.addEventListener('click', triggerReset)
+    }
+
+    const triggerReset = () => {
+        GameLogic.resetGame();
+        displayBoard();
+    }
+
+    return { displayBoard, addEventListenersToCells, addResetGameListener }
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-    DisplayController.addEventListenersToButtons();
+    DisplayController.addEventListenersToCells();
+    DisplayController.addResetGameListener();
 })
