@@ -15,12 +15,6 @@ const GameBoard = (function () {
     const getCell = (index) => {
         return board[index];
     }
-
-    const printBoard = () => {
-        console.log(`${getSymbol(0)} | ${getSymbol(1)} | ${getSymbol(2)}`)
-        console.log(`${getSymbol(3)} | ${getSymbol(4)} | ${getSymbol(5)}`)
-        console.log(`${getSymbol(6)} | ${getSymbol(7)} | ${getSymbol(8)}`)
-    }
     
     const getSymbol = (index) => {
         const cell = getCell(index)
@@ -33,7 +27,7 @@ const GameBoard = (function () {
 
     initializeBoard();
 
-    return { initializeBoard, getBoard, getCell, printBoard };
+    return { initializeBoard, getBoard, getCell, getSymbol };
 })();
 
 
@@ -86,7 +80,7 @@ const GameLogic = (function () {
     }
 
     const gameLogicAfterMove = () => {
-        GameBoard.printBoard();
+        DisplayController.displayBoard();
         movesTaken++;
 
         if (checkWin()) {
@@ -133,4 +127,20 @@ const GameLogic = (function () {
     }
 
     return { makeMove, getPlayerSymbol, resetGame }
+})();
+
+const DisplayController = (function () {
+    const displayBoard = () => {
+        for (let i = 0; i < GameBoard.getBoard().length; ++i) {
+            printSymbol(i);
+        }
+    }
+
+    const printSymbol = (index) => {
+        const symbol = GameBoard.getSymbol(index);
+        const displayCell = document.querySelector(`.cell:nth-child(${index + 1}) button`);
+        displayCell.textContent = symbol;
+    }
+
+    return { displayBoard }
 })();

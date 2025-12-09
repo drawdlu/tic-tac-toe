@@ -1,0 +1,19 @@
+main {
+    display: flex;
+    justify-content: center;
+}
+
+.board .container {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+}
+
+.board .container .cell {
+    border: 2px solid black;
+}
+
+.cell button {
+    width: 100%;
+    height: 100%;
+}
