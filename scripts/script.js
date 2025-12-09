@@ -79,7 +79,7 @@ const GameLogic = (function () {
     const makeMove = (index) => {
         const cell = GameBoard.getCell(index);
 
-        if ( cell.isEmpty() ) {
+        if ( cell != null && cell.isEmpty() ) {
             cell.setPlayer(currentPlayer);
             gameLogicAfterMove();
         }
