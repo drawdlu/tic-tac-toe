@@ -62,7 +62,8 @@ function createPlayer (nameValue) {
 
 
 const GameLogic = (function () {
-    const players = {"x" : createPlayer("Player X"), "o" : createPlayer("Player O")};
+    const defaultNames = {'x': 'Player X', 'o': 'Player O'}
+    const players = {'x' : createPlayer(defaultNames['x']), 'o' : createPlayer(defaultNames['o'])};
     let currentPlayer = players["x"];
     const winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7],
                             [2, 5, 8], [0, 4, 8], [2, 4, 6]]
@@ -131,7 +132,9 @@ const GameLogic = (function () {
 
     const getPlayers = () => players;
 
-    return { makeMove, getPlayerSymbol, resetGame, getPlayers }
+    const getDefaultNames = () => defaultNames;
+
+    return { makeMove, getPlayerSymbol, resetGame, getPlayers, getDefaultNames }
 })();
 
 
@@ -152,7 +155,30 @@ const DisplayController = (function () {
     }
 
     const showStartDialog = () => {
+        updateInputNames();
         document.querySelector('dialog.start-game').showModal()
+    }
+
+    const updateInputNames = () => {
+        const xPlayerInput = document.querySelector('input#xPlayerName');
+        const oPlayerInput = document.querySelector('input#oPlayerName');
+
+        const players = GameLogic.getPlayers();
+        const defaultNames = GameLogic.getDefaultNames();
+        const xPlayerName = players['x'].getName();
+        const oPlayerName = players['o'].getName();
+
+        if (xPlayerName != defaultNames['x']) {
+            xPlayerInput.value = xPlayerName;
+        } else {
+            xPlayerInput.placeholder = xPlayerName;
+        }
+
+        if (oPlayerName != defaultNames['o']) {
+            oPlayerInput.value = oPlayerName;
+        } else {
+            oPlayerInput.placeholder = oPlayerName;
+        }
     }
 
     return { displayBoard, closeStartDialog, showStartDialog }
