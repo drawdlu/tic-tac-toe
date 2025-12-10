@@ -55,12 +55,14 @@ function createPlayer (nameValue) {
 
     const getName = () => name;
 
-    return { getName };
+    const changeName = (newName) => name = newName;
+
+    return { getName, changeName };
 }
 
 
 const GameLogic = (function () {
-    const players = {"x" : createPlayer("Player 1"), "o" : createPlayer("Player 2")};
+    const players = {"x" : createPlayer("Player X"), "o" : createPlayer("Player O")};
     let currentPlayer = players["x"];
     const winConditions = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7],
                             [2, 5, 8], [0, 4, 8], [2, 4, 6]]
@@ -124,10 +126,14 @@ const GameLogic = (function () {
         GameBoard.initializeBoard();
         currentPlayer = players["x"];
         movesTaken = 0;
+        DisplayController.displayBoard();
     }
 
-    return { makeMove, getPlayerSymbol, resetGame }
+    const getPlayers = () => players;
+
+    return { makeMove, getPlayerSymbol, resetGame, getPlayers }
 })();
+
 
 const DisplayController = (function () {
     const displayBoard = () => {
@@ -141,12 +147,25 @@ const DisplayController = (function () {
         displayCell.textContent = symbol;
     }
 
-    const addEventListenersToCells = () => {
-        const cells = document.querySelectorAll(' .cell button ');
-        cells.forEach(addListener);
+    const closeStartDialog = () => {
+        document.querySelector('dialog.start-game').close()
     }
 
-    const addListener = (cell) => {
+    const showStartDialog = () => {
+        document.querySelector('dialog.start-game').showModal()
+    }
+
+    return { displayBoard, closeStartDialog, showStartDialog }
+})();
+
+
+const ButtonsController = ( function() {
+    const addEventListenersToCells = () => {
+        const cells = document.querySelectorAll(' .cell button ');
+        cells.forEach(addCellListener);
+    }
+
+    const addCellListener = (cell) => {
         cell.addEventListener('click', triggerMove)
     }
 
@@ -160,18 +179,41 @@ const DisplayController = (function () {
     }
 
     const addResetListener = (button) => {
-        button.addEventListener('click', triggerReset)
+        button.addEventListener('click', GameLogic.resetGame)
     }
 
-    const triggerReset = () => {
-        GameLogic.resetGame();
-        displayBoard();
+    const addStartEventListener = () => {
+        const startForm = document.querySelector('.start-game form')
+        startForm.addEventListener('submit', saveNames)
     }
 
-    return { displayBoard, addEventListenersToCells, addResetGameListener }
+    const saveNames = (e) => {
+        e.preventDefault();
+
+        const startForm = document.querySelector('.start-game form');
+        const formData = new FormData(startForm);
+        const formNames = Object.fromEntries(formData.entries());
+        const players = GameLogic.getPlayers();
+
+        if (formNames.oPlayerName != "") {
+            players['o'].changeName(formNames.oPlayerName);
+        }
+
+        if (formNames.xPlayerName != "") {
+            players['x'].changeName(formNames.xPlayerName);
+        }
+
+        DisplayController.closeStartDialog();
+    }
+
+    return {addEventListenersToCells, addResetGameListener, addStartEventListener}
 })();
 
+
 document.addEventListener('DOMContentLoaded', () => {
-    DisplayController.addEventListenersToCells();
-    DisplayController.addResetGameListener();
+    ButtonsController.addEventListenersToCells();
+    ButtonsController.addResetGameListener();
+    ButtonsController.addStartEventListener();
+
+    DisplayController.showStartDialog();
 })
