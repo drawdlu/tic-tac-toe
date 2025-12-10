@@ -128,6 +128,7 @@ const GameLogic = (function () {
         currentPlayer = players["x"];
         movesTaken = 0;
         DisplayController.displayBoard();
+        DisplayController.showStartDialog();
     }
 
     const getPlayers = () => players;
