@@ -129,6 +129,7 @@ const GameLogic = (function () {
         currentPlayer = players["x"];
         movesTaken = 0;
         DisplayController.displayBoard();
+        DisplayController.clearPlayerTurn();
         DisplayController.showStartDialog();
     }
 
@@ -192,7 +193,12 @@ const DisplayController = (function () {
         nameContainer.textContent = `${playerName}'s Turn`;
     }
 
-    return { displayBoard, closeStartDialog, showStartDialog, showPlayerTurn }
+    const clearPlayerTurn = () => {
+        const nameContainer = document.querySelector('.player-turn .container');
+        nameContainer.textContent = '';
+    }
+
+    return { displayBoard, closeStartDialog, showStartDialog, showPlayerTurn, clearPlayerTurn }
 })();
 
 
