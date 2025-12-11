@@ -97,11 +97,11 @@ const GameLogic = (function () {
     }
 
     const handleWin = () => {
-        console.log(`${currentPlayer.getName()} has won the Game!!!`);
+        DisplayController.announceResult(`${currentPlayer.getName()} has won the game!!!`)
     }
 
     const handleDraw = () => {
-        console.log("You have reached a draw.");
+        DisplayController.announceResult('You have reached a draw.')
     }
 
     const checkWin = () => {
@@ -130,6 +130,7 @@ const GameLogic = (function () {
         movesTaken = 0;
         DisplayController.displayBoard();
         DisplayController.clearPlayerTurn();
+        DisplayController.closeResultDialog();
         DisplayController.showStartDialog();
     }
 
@@ -198,7 +199,20 @@ const DisplayController = (function () {
         nameContainer.textContent = '';
     }
 
-    return { displayBoard, closeStartDialog, showStartDialog, showPlayerTurn, clearPlayerTurn }
+    const announceResult = (result) => {
+        const resultDialog = document.querySelector('dialog.result')
+        const dialogMessageNode = document.querySelector('dialog.result .message')
+        dialogMessageNode.textContent = result
+        resultDialog.showModal();
+    }
+
+    const closeResultDialog = () => {
+        const resultDialog = document.querySelector('dialog.result');
+        resultDialog.close();
+    }
+
+    return { displayBoard, closeStartDialog, showStartDialog, showPlayerTurn, 
+            clearPlayerTurn, announceResult, closeResultDialog }
 })();
 
 
