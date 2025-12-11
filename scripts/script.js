@@ -92,6 +92,7 @@ const GameLogic = (function () {
             handleDraw();
         } else {
             switchCurrentPlayer();
+            DisplayController.showPlayerTurn();
         }
     }
 
@@ -135,7 +136,9 @@ const GameLogic = (function () {
 
     const getDefaultNames = () => defaultNames;
 
-    return { makeMove, getPlayerSymbol, resetGame, getPlayers, getDefaultNames }
+    const getCurrentPlayer = () => currentPlayer;
+
+    return { makeMove, getPlayerSymbol, resetGame, getPlayers, getDefaultNames, getCurrentPlayer }
 })();
 
 
@@ -182,7 +185,14 @@ const DisplayController = (function () {
         }
     }
 
-    return { displayBoard, closeStartDialog, showStartDialog }
+    const showPlayerTurn = () => {
+        const playerName = GameLogic.getCurrentPlayer().getName();
+        const nameContainer = document.querySelector('.player-turn .container');
+
+        nameContainer.textContent = `${playerName}'s Turn`;
+    }
+
+    return { displayBoard, closeStartDialog, showStartDialog, showPlayerTurn }
 })();
 
 
@@ -230,6 +240,7 @@ const ButtonsController = ( function() {
             players['x'].changeName(formNames.xPlayerName);
         }
 
+        DisplayController.showPlayerTurn();
         DisplayController.closeStartDialog();
     }
 
