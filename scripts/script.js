@@ -140,7 +140,17 @@ const GameLogic = (function () {
 
     const getCurrentPlayer = () => currentPlayer;
 
-    return { makeMove, getPlayerSymbol, resetGame, getPlayers, getDefaultNames, getCurrentPlayer }
+    const updateNames = (xPlayerName, oPlayerName) => {
+        if (xPlayerName) {
+            players['x'].changeName(xPlayerName)
+        }
+
+        if (oPlayerName) {
+            players['o'].changeName(oPlayerName)
+        }
+    }
+
+    return { makeMove, getPlayerSymbol, resetGame, getPlayers, getDefaultNames, getCurrentPlayer, updateNames }
 })();
 
 
@@ -247,18 +257,11 @@ const ButtonsController = ( function() {
     const saveNames = (e) => {
         e.preventDefault();
 
-        const startForm = document.querySelector('.start-game form');
+        const startForm = e.target;
         const formData = new FormData(startForm);
         const formNames = Object.fromEntries(formData.entries());
-        const players = GameLogic.getPlayers();
 
-        if (formNames.oPlayerName != "") {
-            players['o'].changeName(formNames.oPlayerName);
-        }
-
-        if (formNames.xPlayerName != "") {
-            players['x'].changeName(formNames.xPlayerName);
-        }
+        GameLogic.updateNames(formNames.xPlayerName, formNames.oPlayerName)
 
         DisplayController.showPlayerTurn();
         DisplayController.closeStartDialog();
